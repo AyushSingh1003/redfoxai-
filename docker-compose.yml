@@ -1,0 +1,50 @@
+services:
+  juice-shop:
+    image: bkimminich/juice-shop
+    container_name: redfox-juice-shop
+    networks:
+      - security-lab
+    expose:
+      - "3000"
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+    container_name: redfox-backend
+    networks:
+      - security-lab
+      - web-net
+    environment:
+      APP_ENV: production
+      LAB_TARGET: http://juice-shop:3000
+      DATABASE_URL: sqlite:///./redfox_ai.db
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
+      OLLAMA_MODEL: qwen2.5:3b
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      - juice-shop
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: redfox-frontend
+    networks:
+      - web-net
+    ports:
+      - "127.0.0.1:5173:5173"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+networks:
+  # Isolated internal network for target lab - no outbound internet access
+  security-lab:
+    internal: true
+  # Web application communication network
+  web-net:
+    driver: bridge

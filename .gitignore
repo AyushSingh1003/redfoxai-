@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Frontend
+node_modules/
+dist/
+
+# Local database and logs
+*.db
+*.db*
+*.sqlite3
+*.log
+*.bak*
+
+# Editor and OS
+.DS_Store
+.vscode/
