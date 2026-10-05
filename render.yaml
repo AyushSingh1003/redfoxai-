@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: redfox-ai
+    env: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: DATABASE_URL
+        value: sqlite:///./redfox_ai.db
+      - key: LAB_TARGET
+        value: http://127.0.0.1:3000
