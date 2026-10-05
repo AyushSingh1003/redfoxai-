@@ -13,29 +13,6 @@ REDFOX AI is an agentic cybersecurity assessment platform designed to demonstrat
 
 The system is deliberately scoped to run against an isolated local training target (such as OWASP Juice Shop) within a restricted Docker bridge network. It strictly prevents arbitrary public scanning, evading detection, exploiting live targets, or executing arbitrary shell commands.
 
-```mermaid
-flowchart TD
-    User["Security Engineer / User"] -->|Browser UI :5173| Frontend["React 19 + TypeScript SPA"]
-    Frontend -->|REST APIs + SSE Stream| Backend["FastAPI Backend :8000"]
-    
-    subgraph Core Platform Boundaries
-        Backend --> Policy["Policy Engine (Scope & Tool Policy)"]
-        Backend --> DB[("SQLite Database")]
-        
-        Policy --> Agent["LangGraph Orchestrator"]
-        Agent -->|Structured Planning| LLM["Ollama / Local LLM (qwen2.5:3b)"]
-        Agent -->|Grounded Guidelines| RAG["Curated Knowledge Base (OWASP)"]
-        
-        Agent --> Registry["Immutable Tool Registry"]
-        Registry --> Tools["Deterministic Security Tools\n(HTTP Status, Headers, Cookies)"]
-    end
-    
-    subgraph Isolated Security Lab Network
-        Tools -.->|Hardened HTTP Requests\n(No redirects, size limits)| JuiceShop["Target: OWASP Juice Shop :3000\n(Internal Network Only)"]
-    end
-```
-
----
 
 ## 2. Core Architectural Principles
 
